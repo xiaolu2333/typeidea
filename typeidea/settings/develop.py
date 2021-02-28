@@ -1,4 +1,4 @@
-from .base import *  # NOQA
+from .base import * # NOQA
 import os
 
 # SECURITY WARNING: don't run with debug turned on in production!
