@@ -53,6 +53,7 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
     title = "分类过滤器"
     parameter_name = "owner_category"
 
+
     def lookups(self, request, model_admin):
         return Category.objects.filter(owner=request.user).values_list('id', 'name')
 
