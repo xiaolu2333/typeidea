@@ -5,11 +5,20 @@ from django.utils.html import format_html
 from .models import Post, Tag, Category
 import time
 from .adminforms import PostAdminForm
+from django.contrib import admin
 
 
 # Register your models here.
+class PostInline(admin.TabularInline):
+    fields = ("title", "desc")
+    extra = 1
+    model = Post
+
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    inlines = [PostInline, ]
+
     list_display = ('name', 'status', 'is_nav', 'created_time', 'owner', 'post_count')
     fields = ('name', 'status', 'is_nav')
 
@@ -79,7 +88,7 @@ class PostAdmin(admin.ModelAdmin):
         ("基本配置", {
             "description": "基本配置描述",
             "fields": (
-                ('title', 'category'),
+                ('title', 'category',),
                 'status'
             )
         }),
@@ -89,7 +98,7 @@ class PostAdmin(admin.ModelAdmin):
             )
         }),
         ("额外信息", {
-            "classes": ("collapse",),
+            "classes": ("wide",),
             "fields": (
                 'tag',
             )
