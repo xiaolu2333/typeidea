@@ -53,7 +53,6 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
     title = "分类过滤器"
     parameter_name = "owner_category"
 
-
     def lookups(self, request, model_admin):
         return Category.objects.filter(owner=request.user).values_list('id', 'name')
 
@@ -74,8 +73,28 @@ class PostAdmin(admin.ModelAdmin):
 
     actions_on_top = True
 
-    fields = [('title', 'category'),
-              'desc', 'status', 'tag', 'content']
+    fieldsets = (
+        ("基本配置", {
+            "description": "基本配置描述",
+            "fields": (
+                ('title', 'category'),
+                'status'
+            )
+        }),
+        ("内容", {
+            "fields": (
+                'desc', 'content'
+            )
+        }),
+        ("额外信息", {
+            "classes": ("collapse",),
+            "fields": (
+                'tag',
+            )
+        })
+    )
+
+    filter_horizontal = ("tag",)
 
     def operator(self, obj):
         return format_html(
