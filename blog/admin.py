@@ -9,6 +9,10 @@ from django.contrib import admin
 
 
 # Register your models here.
+admin.site.site_title = "博客系统后台管理"
+admin.site.site_header = "博客——记录每一段成长"
+
+
 class PostInline(admin.TabularInline):
     fields = ("title", "desc")
     extra = 1
@@ -29,15 +33,17 @@ class CategoryAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.owner = request.user
         localtime = time.asctime(time.localtime(time.time()))
-        try:
-            category_old = self.model.objects.get(name=obj.name).name
-        except:
+        category_old = self.model.objects.get(name=obj.name).name
+        if not category_old:
             category_old = "👨‍🍳初始信息"
         category_new = form.cleaned_data['name']
         f = open("/home/dfl/py-projects/web/django/log.txt", "a")
         f.write("Category" + str(category_old) + "在" + localtime + "被" + str(obj.owner) + "修改为" + str(category_new) + '\r\n')
         return super(CategoryAdmin, self).save_model(request, obj, form, change)
 
+    def get_queryset(self, request):
+        qs = super(CategoryAdmin, self).get_queryset(request)
+        return qs.filter(owner=request.user)
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
@@ -47,9 +53,8 @@ class TagAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.owner = request.user
         localtime = time.asctime(time.localtime(time.time()))
-        try:
-            tag_old = self.model.objects.get(name=obj.name).name
-        except:
+        tag_old = self.model.objects.get(name=obj.name).name
+        if not tag_old:
             tag_old = "👨‍🍳初始信息"
         tag_new = form.cleaned_data['name']
         f = open("/home/dfl/py-projects/web/django/log.txt", "a")
@@ -75,13 +80,26 @@ class CategoryOwnerFilter(admin.SimpleListFilter):
         return queryset
 
 
+class TagOwnerFilter(admin.SimpleListFilter):
+    title = "标签过滤器"
+    parameter_name = "owner_tag"
+
+    def lookups(self, request, model_admin):
+        return Tag.objects.filter(owner=request.user).values_list('id', 'name')
+
+    def queryset(self, request, queryset):
+        tag_id = self.value()
+        if tag_id:
+            return queryset.filter(tag=self.value())
+
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     form = PostAdminForm
     list_display = ['title', 'category', 'status', 'created_time', 'owner', 'operator']
     list_display_links = []
 
-    list_filter = [CategoryOwnerFilter, ]
+    list_filter = [CategoryOwnerFilter, TagOwnerFilter]
     search_fields = ['title', 'category__name']
 
     actions_on_top = True
@@ -119,9 +137,8 @@ class PostAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.owner = request.user
         localtime = time.asctime(time.localtime(time.time()))
-        try:
-            post_old = self.model.objects.filter(id=obj.pk)
-        except:
+        post_old = self.model.objects.filter(id=obj.pk)
+        if not post_old:
             post_old = "👨‍🍳初始信息"
         post_new = form.cleaned_data
         f = open("/home/dfl/py-projects/web/django/log.txt", "a")
