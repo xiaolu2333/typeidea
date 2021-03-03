@@ -96,7 +96,7 @@ class TagOwnerFilter(admin.SimpleListFilter):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     form = PostAdminForm
-    list_display = ['title', 'category', 'status', 'created_time', 'owner', 'operator']
+    list_display = ['title', 'category', 'colored_status', 'created_time', 'owner', 'operator']
     list_display_links = []
 
     list_filter = [CategoryOwnerFilter, TagOwnerFilter]
