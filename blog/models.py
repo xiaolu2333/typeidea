@@ -1,8 +1,10 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-
 # Create your models here.
+from django.utils.html import format_html
+
+
 class Category(models.Model):
     STATUS_NORMAL = 1
     STATUS_DELETE = 0
@@ -22,8 +24,6 @@ class Category(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = "分类"
-
-
 
 
 class Tag(models.Model):
@@ -71,3 +71,17 @@ class Post(models.Model):
     class Meta:
         verbose_name = verbose_name_plural = "文章"
         ordering = ['-id']
+
+    def colored_status(self):
+        if self.status == 0:
+            color_code = 'red'
+        elif self.status == 1:
+            color_code = 'green'
+        else:
+            color_code = 'yellow'
+        return format_html(
+            '<span style="color:{};">{}</span>',
+            color_code, self.status,
+        )
+
+    colored_status.short_description = '文章状态'
