@@ -22,8 +22,6 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'status', 'is_nav', 'created_time', 'owner', 'post_count')
     fields = ('name', 'status', 'is_nav')
 
-    # list_filter = [CategoryOwnerFilter, ]
-
     def post_count(self, obj):
         return obj.post_set.count()
     post_count.short_description = "文章数量"
@@ -57,6 +55,10 @@ class TagAdmin(admin.ModelAdmin):
         f = open("/home/dfl/py-projects/web/django/log.txt", "a")
         f.write("Tag" + str(tag_old) + "在" + localtime + "被" + str(obj.owner) + "修改为" + str(tag_new) + '\r\n')
         return super(TagAdmin, self).save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        qs = super(TagAdmin, self).get_queryset(request)
+        return qs.filter(owner=request.user)
 
 
 class CategoryOwnerFilter(admin.SimpleListFilter):
@@ -98,9 +100,9 @@ class PostAdmin(admin.ModelAdmin):
             )
         }),
         ("额外信息", {
-            "classes": ("wide",),
+            "classes": ("collapse",),
             "fields": (
-                'tag',
+                "tag",
             )
         })
     )
@@ -130,8 +132,9 @@ class PostAdmin(admin.ModelAdmin):
         qs = super(PostAdmin, self).get_queryset(request)
         return qs.filter(owner=request.user)
 
-    class Media:
-        css = {
-            'all': ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css',),
-        }
-        js = ('https://cdn.bootcss.com/bootstrap/4.0 0-beta.2/js/bootstrap.bundle.js',)
+    # 会导致文章修改页面的“额外信息”在classes设置为collapse时显示失败
+    # class Media:
+    #     css = {
+    #         'all': ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css',),
+    #     }
+    #     js = ('https://cdn.bootcss.com/bootstrap/4.0 0-beta.2/js/bootstrap.bundle.js',)
