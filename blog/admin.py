@@ -45,6 +45,7 @@ class CategoryAdmin(admin.ModelAdmin):
         qs = super(CategoryAdmin, self).get_queryset(request)
         return qs.filter(owner=request.user)
 
+
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'status', 'created_time', 'owner')
@@ -148,6 +149,16 @@ class PostAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super(PostAdmin, self).get_queryset(request)
         return qs.filter(owner=request.user)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "category":
+            kwargs["queryset"] = Category.objects.filter(owner=request.user)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "tag":
+            kwargs["query set"] = Tag.objects.filter(owner=request.user)
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
 
     # 会导致文章修改页面的“额外信息”在classes设置为collapse时显示失败
     # class Media:
