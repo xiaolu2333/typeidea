@@ -6,6 +6,7 @@ from .models import Post, Tag, Category
 import time
 from .adminforms import PostAdminForm
 from typeidea.custom_site import custom_site
+from django.contrib.auth import get_permission_codename
 
 
 # Register your models here.
@@ -93,6 +94,7 @@ class TagOwnerFilter(admin.SimpleListFilter):
         if tag_id:
             return queryset.filter(tag=self.value())
 
+PERMISSION_API = "http://permission.sso.com/has_perm?user={}&perm_code={}"
 
 @admin.register(Post, site=custom_site)
 class PostAdmin(admin.ModelAdmin):
@@ -159,6 +161,16 @@ class PostAdmin(admin.ModelAdmin):
         if db_field.name == "tag":
             kwargs["queryset"] = Tag.objects.filter(owner=request.user)
         return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+    # def has_add_permission(self, request):
+    #     opts = self.opts
+    #     codename = get_permission_codename("add", opts)
+    #     perm_code = "%s,%s" % (opts.app_label, codename)
+    #     resp = request.get(PERMISSION_API.format(request.user.username, perm_code))
+    #     if resp.status_code == "200":
+    #         return True
+    #     else:
+    #         return False
 
     # 会导致文章修改页面的“额外信息”在classes设置为collapse时显示失败
     # class Media:
