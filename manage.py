@@ -6,7 +6,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'typeidea.settings.develop')
+    # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'typeidea.settings')
     profile = os.environ.get('TYPEIDEA_PROFILE', 'develop')
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'typeidea.settings.%s' % profile)
     try:
