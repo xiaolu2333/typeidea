@@ -5,7 +5,7 @@ from django.utils.html import format_html
 from .models import Post, Tag, Category
 import time
 from .adminforms import PostAdminForm
-from django.contrib import admin
+from typeidea.custom_site import custom_site
 
 
 # Register your models here.
@@ -94,7 +94,7 @@ class TagOwnerFilter(admin.SimpleListFilter):
             return queryset.filter(tag=self.value())
 
 
-@admin.register(Post)
+@admin.register(Post, site=custom_site)
 class PostAdmin(admin.ModelAdmin):
     form = PostAdminForm
     list_display = ['title', 'category', 'colored_status', 'created_time', 'owner', 'operator']
@@ -131,7 +131,7 @@ class PostAdmin(admin.ModelAdmin):
     def operator(self, obj):
         return format_html(
             '<a href={}>编辑</a>',
-            reverse('admin:blog_post_change', args=(obj.id,))
+            reverse('cus_admin:blog_post_change', args=(obj.id,))
         )
     operator.short_description = "操作"
 
@@ -157,7 +157,7 @@ class PostAdmin(admin.ModelAdmin):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "tag":
-            kwargs["query set"] = Tag.objects.filter(owner=request.user)
+            kwargs["queryset"] = Tag.objects.filter(owner=request.user)
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
     # 会导致文章修改页面的“额外信息”在classes设置为collapse时显示失败
