@@ -3,10 +3,9 @@ from django.urls import reverse
 from django.utils.html import format_html
 
 from .models import Post, Tag, Category
-import time
 from .adminforms import PostAdminForm
 from typeidea.custom_site import custom_site
-from django.contrib.auth import get_permission_codename
+from typeidea.base_admin import BaseOwnerAdmin
 
 
 # Register your models here.
@@ -21,7 +20,7 @@ class PostInline(admin.TabularInline):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(BaseOwnerAdmin):
     inlines = [PostInline, ]
 
     list_display = ('name', 'status', 'is_nav', 'created_time', 'owner', 'post_count')
@@ -31,41 +30,11 @@ class CategoryAdmin(admin.ModelAdmin):
         return obj.post_set.count()
     post_count.short_description = "文章数量"
 
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        localtime = time.asctime(time.localtime(time.time()))
-        category_old = self.model.objects.get(name=obj.name).name
-        if not category_old:
-            category_old = "👨‍🍳初始信息"
-        category_new = form.cleaned_data['name']
-        f = open("/home/dfl/py-projects/web/django/log.txt", "a")
-        f.write("Category" + str(category_old) + "在" + localtime + "被" + str(obj.owner) + "修改为" + str(category_new) + '\r\n')
-        return super(CategoryAdmin, self).save_model(request, obj, form, change)
-
-    def get_queryset(self, request):
-        qs = super(CategoryAdmin, self).get_queryset(request)
-        return qs.filter(owner=request.user)
-
 
 @admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(BaseOwnerAdmin):
     list_display = ('name', 'status', 'created_time', 'owner')
     fields = ('name', 'status')
-
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        localtime = time.asctime(time.localtime(time.time()))
-        tag_old = self.model.objects.get(name=obj.name).name
-        if not tag_old:
-            tag_old = "👨‍🍳初始信息"
-        tag_new = form.cleaned_data['name']
-        f = open("/home/dfl/py-projects/web/django/log.txt", "a")
-        f.write("Tag" + str(tag_old) + "在" + localtime + "被" + str(obj.owner) + "修改为" + str(tag_new) + '\r\n')
-        return super(TagAdmin, self).save_model(request, obj, form, change)
-
-    def get_queryset(self, request):
-        qs = super(TagAdmin, self).get_queryset(request)
-        return qs.filter(owner=request.user)
 
 
 class CategoryOwnerFilter(admin.SimpleListFilter):
@@ -94,10 +63,9 @@ class TagOwnerFilter(admin.SimpleListFilter):
         if tag_id:
             return queryset.filter(tag=self.value())
 
-PERMISSION_API = "http://permission.sso.com/has_perm?user={}&perm_code={}"
 
 @admin.register(Post, site=custom_site)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(BaseOwnerAdmin):
     form = PostAdminForm
     list_display = ['title', 'category', 'colored_status', 'created_time', 'owner', 'operator']
     list_display_links = []
@@ -137,20 +105,6 @@ class PostAdmin(admin.ModelAdmin):
         )
     operator.short_description = "操作"
 
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        localtime = time.asctime(time.localtime(time.time()))
-        post_old = self.model.objects.filter(id=obj.pk)
-        if not post_old:
-            post_old = "👨‍🍳初始信息"
-        post_new = form.cleaned_data
-        f = open("/home/dfl/py-projects/web/django/log.txt", "a")
-        f.write("Post" + str(post_old) + "在" + localtime + "被" + str(obj.owner) + "修改为" + str(post_new) + '\r\n')
-        return super(PostAdmin, self).save_model(request, obj, form, change)
-
-    def get_queryset(self, request):
-        qs = super(PostAdmin, self).get_queryset(request)
-        return qs.filter(owner=request.user)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "category":
@@ -161,20 +115,3 @@ class PostAdmin(admin.ModelAdmin):
         if db_field.name == "tag":
             kwargs["queryset"] = Tag.objects.filter(owner=request.user)
         return super().formfield_for_manytomany(db_field, request, **kwargs)
-
-    # def has_add_permission(self, request):
-    #     opts = self.opts
-    #     codename = get_permission_codename("add", opts)
-    #     perm_code = "%s,%s" % (opts.app_label, codename)
-    #     resp = request.get(PERMISSION_API.format(request.user.username, perm_code))
-    #     if resp.status_code == "200":
-    #         return True
-    #     else:
-    #         return False
-
-    # 会导致文章修改页面的“额外信息”在classes设置为collapse时显示失败
-    # class Media:
-    #     css = {
-    #         'all': ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css',),
-    #     }
-    #     js = ('https://cdn.bootcss.com/bootstrap/4.0 0-beta.2/js/bootstrap.bundle.js',)
