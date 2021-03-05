@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
+from django.contrib.admin.models import LogEntry
 
 from .models import Post, Tag, Category
 from .adminforms import PostAdminForm
 from typeidea.custom_site import custom_site
 from typeidea.base_admin import BaseOwnerAdmin
-
 
 # Register your models here.
 admin.site.site_title = "博客系统后台管理"
@@ -28,6 +28,7 @@ class CategoryAdmin(BaseOwnerAdmin):
 
     def post_count(self, obj):
         return obj.post_set.count()
+
     post_count.short_description = "文章数量"
 
 
@@ -103,8 +104,8 @@ class PostAdmin(BaseOwnerAdmin):
             '<a href={}>编辑</a>',
             reverse('cus_admin:blog_post_change', args=(obj.id,))
         )
-    operator.short_description = "操作"
 
+    operator.short_description = "操作"
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "category":
@@ -115,3 +116,8 @@ class PostAdmin(BaseOwnerAdmin):
         if db_field.name == "tag":
             kwargs["queryset"] = Tag.objects.filter(owner=request.user)
         return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+
+@admin.register(LogEntry, site=custom_site)
+class LogEntryAdmin(admin.ModelAdmin):
+    list_display = ['object_repr', 'object_id', 'action_flag', 'user', 'change_message']
