@@ -11,14 +11,8 @@
         {% for cate in navs %}
             <a href="/category/{{ cate.id }}">{{ cate.name }}</a>
         {% endfor %}
+        <span><a href="/">全部</a></span>
     </div>
-
-{#    {% if category %}#}
-{#        分类页：{{ category.name }}#}
-{#    {% endif %}#}
-{#    {% if tag %}#}
-{#        标签页：{{ tag.name }}#}
-{#    {% endif %}#}
 
     <ul>
         {% for post in post_list %}
