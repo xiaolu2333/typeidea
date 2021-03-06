@@ -6,6 +6,14 @@
 </head>
 <body>
     <h1>Post List</h1>
+
+    {% if category %}
+        分类页：{{ category.name }}
+    {% endif %}
+    {% if tag %}
+        标签页：{{ tag.name }}
+    {% endif %}
+
     <ul>
         {% for post in post_list %}
             <li>
