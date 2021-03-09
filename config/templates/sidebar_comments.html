@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Comment</title>
 </head>
 <body>
     <Ul>
         {% for comment in comments %}
             <li>
-                <a href="/post/{{ comment.target_id }}.html">{{ comment.target.title }}</a>
+                <a href="{% url 'post_detail' comment.target_id %}">{{ comment.target.title }}</a>
                 {{ comment.nickname }}: {{ comment.content }}
             </li>
         {% endfor %}

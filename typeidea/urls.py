@@ -21,11 +21,11 @@ from config.views import links
 from .custom_site import custom_site
 
 urlpatterns = [
-    path('', post_list),
-    path('post/<int:post_id>.html', post_detail),
-    path('category/<int:category_id>', post_list),
-    path('tag/<int:tag_id>', post_list),
-    path('links/', links),
-    path('super_admin/', admin.site.urls),
-    path('admin/', custom_site.urls)
+    path('', post_list, name="index"),
+    path('post/<int:post_id>.html', post_detail, name="post_detail"),
+    path('category/<int:category_id>', post_list, name="category_list"),
+    path('tag/<int:tag_id>', post_list, name="tag_list"),
+    path('links/', links, name="links"),
+    path('super_admin/', admin.site.urls, name="super_admin"),
+    path('admin/', custom_site.urls, name="admin")
 ]
