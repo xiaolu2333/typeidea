@@ -1,26 +1,18 @@
-{% extends 'base.html' %}
-
-{% block title %}
-    {{ post.title }}
-{% endblock %}
-
-{% block main %}
-    {% if post %}
-        <h2>{{ post.title }}</h2>
-        <div>
+{% if post %}
+    <h2>{{ post.title }}</h2>
+    <div>
             <span>
                 分类：{{ post.category.name }}
             </span>
-            <span>
+        <span>
                 作者：{{ post.owner.username }}
             </span>
-        </div>
-        <div>
-            摘要：{{ post.desc }}
-        </div>
-        <hr>
-        <p>
-            {{ post.content }}
-        </p>
-    {% endif %}
-{% endblock %}
+    </div>
+    <div>
+        摘要：{{ post.desc }}
+    </div>
+    <hr>
+    <p>
+        {{ post.content }}
+    </p>
+{% endif %}
