@@ -3,10 +3,9 @@ from django.shortcuts import get_object_or_404
 from blog.models import Tag, Category, Post
 from config.models import SideBar
 
-
 # Create your views here.
 class CommonViewMixin(object):
-    def __init__(self, request, *args, **kwargs):
+    def setup(self, request, *args, **kwargs):
         """Initialize attributes shared by all view methods."""
         if hasattr(self, 'get') and not hasattr(self, 'head'):
             self.head = self.get
