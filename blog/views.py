@@ -1,9 +1,7 @@
-from django.contrib.auth.models import User
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import DetailView, ListView
 from django.shortcuts import get_object_or_404
 from blog.models import Tag, Category, Post
 from config.models import SideBar
-
 
 # Create your views here.
 class CommonViewMixin(object):
