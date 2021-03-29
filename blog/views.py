@@ -51,7 +51,7 @@ class TagView(IndexView):
     def get_queryset(self):
         queryset = super().get_queryset()
         tag_id = self.kwargs.get('tag_id')
-        return queryset.filter(tag_id=tag_id)
+        return queryset.filter(tag=tag_id)
 
 
 class PostDetailView(CommonViewMixin, DetailView):
