@@ -1,17 +1,26 @@
-from django.views.generic import DetailView, ListView
+from django.contrib.auth.models import User
+from django.views.generic import DetailView, ListView, TemplateView
 from django.shortcuts import get_object_or_404
 from blog.models import Tag, Category, Post
 from config.models import SideBar
 
 
 # Create your views here.
-class CommonViewMixin:
+class CommonViewMixin(object):
+    def setup(self, request, *args, **kwargs):
+        """Initialize attributes shared by all view methods."""
+        if hasattr(self, 'get') and not hasattr(self, 'head'):
+            self.head = self.get
+        self.request = request
+        self.args = args
+        self.kwargs = kwargs
+
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(CommonViewMixin, self).get_context_data(**kwargs)
         context.update({
             'sidebars': SideBar.get_all(),
         })
-        context.update(Category.get_navs())
+        context.update(Category.get_navs(owner=self.request.user.id))
         return context
 
 
