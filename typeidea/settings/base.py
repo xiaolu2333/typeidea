@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -51,13 +51,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'typeidea.urls'
 
+
+THEME = 'default'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'),
-                 os.path.join(BASE_DIR, 'blog/templates'),
-                 os.path.join(BASE_DIR, 'config/templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'themes', THEME, 'templates'),
+                 os.path.join(BASE_DIR, 'themes', THEME, 'templates', 'blog'),
+                 os.path.join(BASE_DIR, 'themes', THEME, 'templates', 'config'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

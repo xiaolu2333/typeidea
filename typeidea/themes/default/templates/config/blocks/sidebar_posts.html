@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Posts</title>
+</head>
+<body>
+    <Ul>
+        {% for post in posts %}
+            <li>
+                <a href="{% url 'post_detail' comment.target_id %}">{{ post.title }}</a>
+            </li>
+        {% endfor %}
+    </Ul>
+</body>
+</html>
