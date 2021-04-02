@@ -1,34 +1,93 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title%}首页{% endblock %}</title>
+    <title>Typeidea Blog</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.css">
+
+    <style>
+        .post {
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
-    <div>顶部分类
-        {% for cate in navs %}
-            <a href="{% url 'category_list' cate.id %}">{{ cate.name }}</a>
-        {% endfor %}
-        <span><a href="/">全部</a></span>
+    <div class="container-fluid head">
+        <nav class="navbar navbar-expend-lg bg-dark">
+            <a class="navbar-brand" href="{% url 'index' %}">首页</a>
+            <div class="navbar mr-auto" id="navbarSupportedContent">
+                <ul class="nav nav-pills nav-justified">
+                    {% for cate in navs %}
+                        <li class="nav-item">
+                            <a class="nav-link text-nowrap" href="{% url 'category_list' cate.id %}">{{ cate.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <form action='' class="form-inline my-2 my-lg-0">
+                <div class="form-group">
+                    <div class="input-group">
+                        <label for="exampleInputAmount"></label>
+                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="Search"
+                               name="search_content">
+                    </div>
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-outline-success">搜索</button>
+                    </div>
+                </div>
+            </form>
+        </nav>
+        <div class="jumbotron">
+            <h1 class="display-4 text-center">Typeidea</h1>
+            <p class="lead text-center">基于django的多人在线博客系统</p>
+        </div>
     </div>
-    <hr>
-
-    {% block main %}
-    {% endblock %}
-
-    <hr>
-    <div>底部分类
-        {% for cate in categories %}
-            <a href="{% url 'category_list' cate.id %}">{{ cate.name }}</a>
-        {% endfor %}
+    <div class="container main">
+        <div class="row">
+            <div class="col-9 post_list">
+                {% block main %}
+                {% endblock %}
+            </div>
+            <div class="col-3">
+                {% block sidebar %}
+                    {% for sidebar in sidebars %}
+                        <div class="card-body">
+                            <h4 class="card-title">{{ sidebar.title }}</h4>
+                            <p>{{ sidebar.contemt_html }}</p>
+                        </div>
+                    {% endfor %}
+                {% endblock %}
+            </div>
+        </div>
     </div>
 
-    <hr>
-    <div>侧边栏
-        {% for sd in sidebars %}
-            <h4>{{ sidebars.title }}</h4>
-            {{ sidebars.content_html }}
-        {% endfor %}
-    </div>
+    <footer class="footer bg-dark">
+        {% block footer %}
+            <div class="container-fluid">
+                <hr/>
+                <nav class="nav category">
+                    {% for cate in categories %}
+                        <a href="{% url 'category_list' cate.id %}" class="nav-link">{{ cate.name}}</a>
+                    {% endfor %}
+                </nav>
+            </div>
+            <div class="container power">
+                <p class="text-center text-light">Powered By xiaolu@xiaolu.com</p>
+            </div>
+        {% endblock %}
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
 </body>
 </html>

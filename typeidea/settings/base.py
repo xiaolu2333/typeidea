@@ -51,14 +51,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'typeidea.urls'
 
-
-THEME = 'default'
+THEME = 'bootstrap'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'themes', THEME, 'templates'),
                  os.path.join(BASE_DIR, 'themes', THEME, 'templates', 'blog'),
-                 os.path.join(BASE_DIR, 'themes', THEME, 'templates', 'config'),],
+                 os.path.join(BASE_DIR, 'themes', THEME, 'templates', 'config'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
