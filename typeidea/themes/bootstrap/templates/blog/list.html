@@ -15,7 +15,8 @@
         {% for post in post_list %}
             <div class="card post">
                 <div class="card-body">
-                    <h3 class="card-title"><a class="btn btn-outline-primary btn-lg" href="{% url 'post_detail' post.id %}">{{ post.title  }}</a></h3>
+                    <h3 class="card-title"><a class="btn btn-outline-primary btn-lg"
+                                              href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h3>
                     <span class="card-link">
                         作者：
                         <a href="#">{{ post.owner.username }}</a>
@@ -27,25 +28,29 @@
                     <span class="card-link">
                         标签：
                         {% for tag in post.tag.all %}
-                            <a href="{% url 'tag_list' tag.id%}">{{ tag.name }}</a>
+                            <a href="{% url 'tag_list' tag.id %}">{{ tag.name }}</a>
                         {% endfor %}
                     </span>
-                    <P class= "card-text">
+                    <P class="card-text">
+                        简介：
                         {{ post.desc }}
+                        <br>
                         <a href="{% url 'post_detail' post.id %}">阅读完整内容</a>
                     </p>
                 </div>
             </div>
         {% endfor %}
     </ul>
+    <div class="text-center">
+        {% if page_obj %}
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
+            {% endif %}
+            Page {{ page_obj.number }} of {{ paginator.num_pages }}
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">下一页</a>
+            {% endif %}
+        {% endif %}
+    </div>
 
-    {% if page_obj %}
-        {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
-        {% endif %}
-        Page {{ page_obj.number }} of {{ paginator.num_pages }}
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">下一页</a>
-        {% endif %}
-    {% endif %}
 {% endblock %}
