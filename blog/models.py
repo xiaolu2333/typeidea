@@ -122,8 +122,11 @@ class Post(models.Model):
         return post_list, category
 
     @classmethod
-    def latest_posts(cls):
-        queryset = cls.objects.filter(status=cls.STATUS_NORMAL).order_by("-id")
+    def latest_posts(cls, owner_id=None):
+        if owner_id:
+            queryset = cls.objects.filter(status=cls.STATUS_NORMAL, owner=owner_id).order_by("-id")
+        else:
+            queryset = cls.objects.filter(status=cls.STATUS_NORMAL).order_by("-id")
         return queryset
 
     @classmethod

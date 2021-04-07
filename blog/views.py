@@ -1,11 +1,8 @@
-from django.contrib.auth import authenticate
 from django.db.models import Q
-from django.urls import reverse
 from django.views.generic import DetailView, ListView
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404
 from blog.models import Tag, Category, Post
 from config.models import SideBar
-from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -97,20 +94,11 @@ class AuthorView(IndexView):
         return queryset.filter(owner=author_id)
 
 
-# def login(request):
-#
-#     if request.method == 'POST':
-#         user_name = request.GET.get('user_name', '')
-#         password = request.GET.get('password', '')
-#         if User.objects.filter(username=user_name):
-#             user = authenticate(username=user_name, password=password)
-#             if user:
-#                 if user.is_active:
-#                     # 登录当前用户
-#                     login(request)
-#                 return redirect(reverse('index'))
-#             else:
-#                 tips = '账号密码错误，请重新输入'
-#         else:
-#             tips = '用户不存在'
-#     return render(request, 'login.html')
+class MyPostsView(CommonViewMixin, ListView):
+    paginate_by = 2
+    context_object_name = 'post_list'
+    template_name = 'list.html'
+
+    def get_queryset(self):
+        queryset = Post.latest_posts(owner_id=self.request.user.id)
+        return queryset

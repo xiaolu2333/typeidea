@@ -16,12 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from blog.views import IndexView, CategoryView, TagView, PostDetailView, SearchView, AuthorView
+from blog.views import IndexView, CategoryView, TagView, PostDetailView, SearchView, AuthorView, MyPostsView
 from config.views import links
 from .custom_site import custom_site
 
 urlpatterns = [
     path('', IndexView.as_view(), name="index"),
+    path('myposts/', MyPostsView.as_view(), name="my_posts"),
     path('post/<int:post_id>.html', PostDetailView.as_view(), name="post_detail"),
     path('category/<int:category_id>', CategoryView.as_view(), name="category_list"),
     path('tag/<int:tag_id>', TagView.as_view(), name="tag_list"),
