@@ -27,12 +27,11 @@
                     {% endfor %}
                 </ul>
             </div>
-            <form action='' class="form-inline my-2 my-lg-0">
+            <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="GET">
                 <div class="form-group">
                     <div class="input-group">
                         <label for="exampleInputAmount"></label>
-                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="Search"
-                               name="search_content">
+                        <input type="search" class="form-control" id="exampleInputAmount" placeholder="Search" name="keyword" aria-label="Search“>
                     </div>
                     <div class="button-group">
                         <button type="submit" class="btn btn-outline-success">搜索</button>
