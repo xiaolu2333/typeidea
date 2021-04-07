@@ -1,8 +1,11 @@
+from django.contrib.auth import authenticate
 from django.db.models import Q
+from django.urls import reverse
 from django.views.generic import DetailView, ListView
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from blog.models import Tag, Category, Post
 from config.models import SideBar
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -85,3 +88,29 @@ class SearchView(IndexView):
         if not keyword:
             return queryset
         return queryset.filter(Q(title__contains=keyword) | Q(desc__contains=keyword))
+
+
+class AuthorView(IndexView):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        author_id = self.kwargs.get('author_id')
+        return queryset.filter(owner=author_id)
+
+
+# def login(request):
+#
+#     if request.method == 'POST':
+#         user_name = request.GET.get('user_name', '')
+#         password = request.GET.get('password', '')
+#         if User.objects.filter(username=user_name):
+#             user = authenticate(username=user_name, password=password)
+#             if user:
+#                 if user.is_active:
+#                     # 登录当前用户
+#                     login(request)
+#                 return redirect(reverse('index'))
+#             else:
+#                 tips = '账号密码错误，请重新输入'
+#         else:
+#             tips = '用户不存在'
+#     return render(request, 'login.html')

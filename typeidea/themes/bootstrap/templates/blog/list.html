@@ -19,7 +19,7 @@
                                               href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h3>
                     <span class="card-link">
                         作者：
-                        <a href="#">{{ post.owner.username }}</a>
+                        <a href="{% url 'author' post.owner.id %}">{{ post.owner.username }}</a>
                     </span>
                     <span class="card-link">
                         分类：
