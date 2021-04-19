@@ -14,7 +14,7 @@ class Link(models.Model):
         (STATUS_DELETE, '删除')
     )
 
-    title = models.CharField(max_length=50, verbose_name="biaoti")
+    title = models.CharField(max_length=50, verbose_name="标题")
     href = models.URLField(verbose_name="链接")
     status = models.PositiveIntegerField(default=STATUS_NORMAL, choices=STATUS_ITEMS, verbose_name="状态")
     weight = models.PositiveIntegerField(default=1,
@@ -23,6 +23,9 @@ class Link(models.Model):
                                          help_text="权重高，展示靠前")
     owner = models.ForeignKey(User, verbose_name="作者", on_delete=models.CASCADE)
     created_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+
+    def __str__(self):
+        return self.title
 
     class Meta:
         verbose_name = verbose_name_plural = "友链"
@@ -81,6 +84,9 @@ class SideBar(models.Model):
             }
             result = render_to_string('sidebar_comments.html',context)
         return result
+
+    def __str__(self):
+        return self.title
 
     class Meta:
         verbose_name = verbose_name_plural = "侧边栏"
