@@ -29,6 +29,6 @@ urlpatterns = [
     path('links/', links, name="links"),
     path('super_admin/', admin.site.urls, name="super_admin"),
     path('admin/', custom_site.urls, name="admin"),
-    path('search/', SearchView.as_view(), name='search'),
+    path('search/<int:type_id>', SearchView.as_view(), name='search'),
     path('author/<int:author_id>', AuthorView.as_view(), name='author'),
 ]

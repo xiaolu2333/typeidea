@@ -80,11 +80,14 @@ class SearchView(IndexView):
         return context
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        keyword = self.request.GET.get('keyword', '')
+        type_id = self.kwargs.get('type_id')
+        if type_id == 1:
+            # search personal
+            self.queryset = Post.latest_posts(owner_id=self.request.user.id)
+        keyword = self.request.GET.get('keyword', '').strip()
         if not keyword:
-            return queryset
-        return queryset.filter(Q(title__contains=keyword) | Q(desc__contains=keyword))
+            return self.queryset
+        return self.queryset.filter(Q(title__contains=keyword) | Q(desc__contains=keyword))
 
 
 class AuthorView(IndexView):

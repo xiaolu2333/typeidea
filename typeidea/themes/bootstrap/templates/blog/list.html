@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 
 {% block title %}
     {% if tag %}
@@ -15,8 +15,11 @@
         {% for post in post_list %}
             <div class="card post">
                 <div class="card-body">
-                    <h3 class="card-title"><a class="btn btn-outline-primary btn-lg"
-                                              href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h3>
+                    <h3 class="card-title">
+                        <a class="btn btn-outline-primary btn-lg" href="{% url 'post_detail' post.id %}">
+                            {{ post.title }}
+                        </a>
+                    </h3>
                     <span class="card-link">
                         作者：
                         <a href="{% url 'author' post.owner.id %}">{{ post.owner.username }}</a>
@@ -44,13 +47,12 @@
     <div class="text-center">
         {% if page_obj %}
             {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
+                <a href="?keyword={{ keyword }}&page={{ page_obj.previous_page_number }}">上一页</a>
             {% endif %}
             Page {{ page_obj.number }} of {{ paginator.num_pages }}
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">下一页</a>
+                <a href="?keyword={{ keyword }}&page={{ page_obj.next_page_number }}">下一页</a>
             {% endif %}
         {% endif %}
     </div>
-
 {% endblock %}

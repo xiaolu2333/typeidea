@@ -21,7 +21,10 @@ class Category(models.Model):
 
     @classmethod
     def get_navs(cls, owner=None):
-        categories = Category.objects.filter(status=Category.STATUS_NORMAL, owner=owner)
+        if owner:
+            categories = Category.objects.filter(status=Category.STATUS_NORMAL, owner=owner)
+        else:
+            categories = Category.objects.filter(status=Category.STATUS_NORMAL)
         nav_categories = []
         normal_categories = []
         for cate in categories:
