@@ -26,29 +26,20 @@
                             </li>
                         {% endfor %}
                     </ul>
-                    <a class="nav-link text-nowrap" href="{% url 'my_posts'%}">我的所有文章</a>
+                    <a class="nav-link text-nowrap" href="{% url 'my_posts' %}">我的所有文章</a>
                 </div>
-                <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="GET">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <label for="exampleInputAmount"></label>
-                            <input type="search" class="form-control" id="exampleInputAmount" placeholder="Search"
-                                   name="keyword" aria-label="Search“>
-                                </div>
-                                <div class=" button-group">
-                            <button type="submit" class="btn btn-outline-success">搜索</button>
+                <form id="searform" class="form-inline my-2 my-lg-0" method="GET">
+                    <input type="search" class="form-control" placeholder="Search" name="keyword" aria-label="Search" value="{{ keyword }}">
+                    <div class="btn-group">
+                        <button type="submit" id="searchall" class="btn btn-outline-success" formaction="{% url 'search' 0%}">搜索</button>
+                        <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </button>
+                        <div class="dropdown-menu">
+                            <button type="submit" id="searchpersonal" class="btn btn-outline-success" formaction="{% url 'search' 1%}">只看个人</button>
                         </div>
                     </div>
                 </form>
-                {#        {% block userinfo %}#}
-                {#            <form class="form-inline my-2 my-lg-0" action="{% url 'login' %}" method="GET">#}
-                {#                <div class="form-group">#}
-                {#                    <div class=" button-group">#}
-                {#                        <button type="submit" class="btn btn-outline-success">登陆</button>#}
-                {#                    </div>#}
-                {#                </div>#}
-                {#            </form>#}
-                {#        {% endblock %}#}
             </nav>
             <div class="jumbotron">
                 <h1 class="display-4 text-center">Typeidea</h1>
