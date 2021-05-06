@@ -1,0 +1,124 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>{% block title %}Typeidea Blog{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {#        <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.css">#}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <style>
+        .post {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid head">
+    <nav class="navbar navbar-expend-lg bg-dark">
+        <a class="navbar-brand" href="{% url 'index' %}">首页</a>
+        <div class="navbar mr-auto" id="navbarSupportedContent">
+            <ul class="nav nav-pills nav-justified">
+                {% for cate in navs %}
+                    <li class="nav-item">
+                        <a class="nav-link text-nowrap" href="{% url 'category_list' cate.id %}">{{ cate.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <a class="nav-link text-nowrap" href="{% url 'my_posts' %}">我的所有文章</a>
+        </div>
+        <form id="searform" class="form-inline my-2 my-lg-0" method="GET">
+            <div class="input-group">
+                <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-outline-secondary">Action</button>
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        <div role="separator" class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Separated link</a>
+                    </div>
+                </div>
+            </div>
+{#            <input type="search" class="form-control" placeholder="Search" name="keyword" aria-label="Search"#}
+{#                   value="{{ keyword }}">#}
+{#            <div class="btn-group">#}
+{#                <button type="submit" id="searchall" class="btn btn-outline-success" formaction="{% url 'search' 0 %}">#}
+{#                    搜索#}
+{#                </button>#}
+{#                <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split"#}
+{#                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{#                </button>#}
+{#                <div class="dropdown-menu">#}
+{#                    <button type="submit" id="searchpersonal" class="btn btn-outline-success"#}
+{#                            formaction="{% url 'search' 1 %}">只看个人#}
+{#                    </button>#}
+{#                </div>#}
+{#            </div>#}
+        </form>
+    </nav>
+    <div class="jumbotron">
+        <h1 class="display-4 text-center">Typeidea</h1>
+        <p class="lead text-center">基于django的多人在线博客系统</p>
+    </div>
+</div>
+<div class="container main">
+    <div class="row">
+        <div class="col-9 post_list">
+            {% block main %}
+            {% endblock %}
+        </div>
+        <div class="col-3">
+            <h1>Hello, {{ user }}</h1>
+            {% block sidebar %}
+                {% for sidebar in sidebars %}
+                    <div class="card-body">
+                        <h4 class="card-title">{{ sidebar.title }}</h4>
+                        <p>{{ sidebar.contemt_html }}</p>
+                    </div>
+                {% endfor %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+
+<footer class="footer bg-dark">
+    {% block footer %}
+        <div class="container-fluid">
+            <hr/>
+            <nav class="nav category">
+                {% for cate in categories %}
+                    <a href="{% url 'category_list' cate.id %}" class="nav-link">{{ cate.name }}</a>
+                {% endfor %}
+            </nav>
+        </div>
+        <div class="container power">
+            <p class="text-center text-light">Powered By xiaolu@xiaolu.com</p>
+        </div>
+    {% endblock %}
+</footer>
+
+
+{#        <script href="{% static 'js/bootstrap.min.js' %}"></script>#}
+{#        <script href="{% static 'js/popper.min.js' %}"></script>#}
+        <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+{#        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">#}
+{#</script>#}
+{#<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"#}
+{#        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">#}
+{#</script>#}
+{#<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"#}
+{#        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">#}
+{#</script>#}
+
+
+
+</body>
+</html>

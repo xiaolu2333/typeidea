@@ -19,6 +19,8 @@ from django.urls import path
 from blog.views import IndexView, CategoryView, TagView, PostDetailView, SearchView, AuthorView, MyPostsView
 from config.views import LinkListView
 from .custom_site import custom_site
+from comment.views import CommentView
+
 
 urlpatterns = [
     path('', IndexView.as_view(), name="index"),
@@ -31,4 +33,5 @@ urlpatterns = [
     path('admin/', custom_site.urls, name="admin"),
     path('search/<int:type_id>', SearchView.as_view(), name='search'),
     path('author/<int:author_id>', AuthorView.as_view(), name='author'),
+    path('comment/', CommentView.as_view(), name='comment'),
 ]

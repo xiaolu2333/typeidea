@@ -3,6 +3,8 @@ from django.views.generic import DetailView, ListView
 from django.shortcuts import get_object_or_404
 from blog.models import Tag, Category, Post
 from config.models import SideBar
+from comment.forms import CommentForm
+from comment.models import Comment
 
 
 # Create your views here.
@@ -19,6 +21,7 @@ class CommonViewMixin(object):
         context = super(CommonViewMixin, self).get_context_data(**kwargs)
         context.update({
             'sidebars': SideBar.get_all(),
+            'user': self.request.user
         })
         if self.request.method == 'GET':
             context.update(Category.get_navs(owner=self.request.user.id))
@@ -29,7 +32,7 @@ class IndexView(CommonViewMixin, ListView):
     queryset = Post.latest_posts()
     paginate_by = 2
     context_object_name = 'post_list'
-    template_name = 'list.html'
+    template_name = 'blog/list.html'
 
 
 class CategoryView(IndexView):
@@ -66,9 +69,17 @@ class TagView(IndexView):
 
 class PostDetailView(CommonViewMixin, DetailView):
     queryset = Post.latest_posts()
-    template_name = 'detail.html'
+    template_name = 'blog/detail.html'
     context_object_name = 'post'
     pk_url_kwarg = 'post_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'comment_form': CommentForm,
+            'comment_list': Comment.get_by_target(self.request.path),
+        })
+        return context
 
 
 class SearchView(IndexView):
@@ -100,7 +111,7 @@ class AuthorView(IndexView):
 class MyPostsView(CommonViewMixin, ListView):
     paginate_by = 2
     context_object_name = 'post_list'
-    template_name = 'list.html'
+    template_name = 'blog/list.html'
 
     def get_queryset(self):
         queryset = Post.latest_posts(owner_id=self.request.user.id)
