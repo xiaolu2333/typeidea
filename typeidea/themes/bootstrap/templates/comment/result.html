@@ -28,7 +28,7 @@
             {% else %}
             <ul class="errorlist">
                 {% for field, message in form.errors.items %}
-                    {{ message }}
+                    <li>{{ field }} 错误{{ message }}</li>
                 {% endfor %}
             </ul>
                 <a href="javascript:window.history.back()">返回</a>
