@@ -29,6 +29,7 @@
 </div>
 <hr class=" border-primary">
 <div class="card mb-3" style="width: auto;">
+{% if comment_list %}
     <div class="card-header">
         所有评论：
     </div>
@@ -47,4 +48,9 @@
             </li>
         {% endfor %}
     </ul>
+{% else %}
+    <div class="card-header">
+        暂无评论哟～快去写评论叭～
+    </div>
+{% endif %}
 </div>

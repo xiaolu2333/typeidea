@@ -27,7 +27,9 @@
     <hr class=" border-primary">
     <div>
         <h3>正文</h3>
-        <p>{{ post.content }}</p>
+        {% autoescape off %}
+            <p>{{ post.content_html }}</p>
+        {% endautoescape %}
     </div>
     <hr class=" border-primary">
     {% comment_block request.path %}
