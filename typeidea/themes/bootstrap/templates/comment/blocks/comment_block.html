@@ -16,6 +16,7 @@
                     {% block form %}
                         <input type="hidden" name="target" value="{{ target }}">
                         {{ comment_form.as_p }}
+                        <small id="contentHelp" class="form-text text-muted">评论内容支持Markdown语法</small>
                     {% endblock %}
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>

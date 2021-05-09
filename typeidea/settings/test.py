@@ -1,7 +1,5 @@
-from pathlib import Path
-import os
+import mistune
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+html = mistune.markdown("### 1，Markdown 第三方库")
 
-print(BASE_DIR)
+print(html)
