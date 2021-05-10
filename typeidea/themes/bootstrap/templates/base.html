@@ -6,7 +6,7 @@
         <title>{% block title %}Typeidea Blog{% endblock %}</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
         <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
         <style>
@@ -14,6 +14,8 @@
                 margin-bottom: 5px;
             }
         </style>
+        {% block extra_head %}
+        {% endblock %}
     </head>
     <body>
         <div class="container-fluid head">
