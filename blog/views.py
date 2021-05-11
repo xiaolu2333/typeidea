@@ -1,8 +1,11 @@
-from django.db.models import Q
+from datetime import date
+
+from django.db.models import Q, F
 from django.views.generic import DetailView, ListView
 from django.shortcuts import get_object_or_404
 from blog.models import Tag, Category, Post
 from config.models import SideBar
+from django.core.cache import cache
 
 
 # Create your views here.
@@ -70,6 +73,22 @@ class PostDetailView(CommonViewMixin, DetailView):
     template_name = 'blog/detail.html'
     context_object_name = 'post'
     pk_url_kwarg = 'post_id'
+
+    def get(self, request, *args, **kwargs):
+        response = super(PostDetailView, self).get(request, *args, **kwargs)
+        self.handle_visited()
+        return response
+
+    def handle_visited(self):
+        increase_pv = False
+        uid = self.request.uid  # 获取middleware中设置的用户id
+        pv_key = 'pv:%s:%s' % (uid, self.request.path)
+
+        if not cache.get(pv_key):
+            increase_pv = True
+            cache.set(pv_key, 1, 1 * 60)  # 1分钟有效，防止统计1分钟内多次刷新的情况
+        if increase_pv:
+            Post.objects.filter(pk=self.object.id).update(pv=F('pv') + 1)
 
 
 class SearchView(IndexView):
