@@ -1,6 +1,7 @@
 from django.utils.html import format_html
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.functional import cached_property
 import mistune
 
 
@@ -137,6 +138,10 @@ class Post(models.Model):
     def hot_posts(cls):
         queryset = cls.objects.filter(status=Post.STATUS_NORMAL).order_by('-pv')
         return queryset
+
+    @cached_property
+    def tags(self):
+        return ', '.join(self.tag.values_list('name', flat=True))
 
     def save(self, *args, **kwargs):
         self.content_html = mistune.markdown(self.content)
