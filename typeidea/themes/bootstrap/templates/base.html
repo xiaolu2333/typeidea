@@ -59,10 +59,12 @@
                     <h1 class="text-success">Hello, {{ user }}</h1>
                     {% block sidebar %}
                         {% for sidebar in sidebars %}
+                        <div class="card sidebar">
                             <div class="card-body">
                                 <h4 class="card-title">{{ sidebar.title }}</h4>
-                                <p>{{ sidebar.contemt_html }}</p>
+                                <p>{{ sidebar.content_html }}</p>
                             </div>
+                        </div>
                         {% endfor %}
                     {% endblock %}
                 </div>

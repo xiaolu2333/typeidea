@@ -61,7 +61,7 @@ class SideBar(models.Model):
         return cls.objects.filter(status=SideBar.STATUS_SHOW)
 
     @property
-    def comment_html(self):
+    def content_html(self):
         from blog.models import Post    # 避免循环引用
         from comment.models import Comment
 
@@ -70,19 +70,19 @@ class SideBar(models.Model):
             result = self.content
         elif self.display_type == self.DISPLAY_LATEST:
             context = {
-                'posts': Post.latest_posts()
+                'posts': Post.latest_posts()[:5]
             }
-            result = render_to_string('sidebar_posts.html', context)
+            result = render_to_string('config/blocks/sidebar_posts.html', context)
         elif self.display_type == self.DISPLAY_HOT:
             context = {
                 'posts': Post.hot_posts()
             }
-            result = render_to_string('sidebar_posts.html', context)
+            result = render_to_string('config/blocks/sidebar_posts.html', context)
         elif self.display_type == self.DISPLAY_COMMENT:
             context = {
                 'comments': Comment.objects.filter(status=Comment.STATUS_NORMAL)
             }
-            result = render_to_string('sidebar_comments.html',context)
+            result = render_to_string('config/blocks/sidebar_comments.html',context)
         return result
 
     def __str__(self):
