@@ -136,7 +136,7 @@ class Post(models.Model):
 
     @classmethod
     def hot_posts(cls):
-        queryset = cls.objects.filter(status=Post.STATUS_NORMAL).order_by('-pv')
+        queryset = cls.objects.filter(status=Post.STATUS_NORMAL).order_by('-pv')[:5]
         return queryset
 
     @cached_property

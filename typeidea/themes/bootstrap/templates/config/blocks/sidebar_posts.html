@@ -1,18 +1,3 @@
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <title>Posts</title>#}
-{#</head>#}
-{#<body>#}
-{% block sidebar %}
-    <Ul>
-        {% for post in posts %}
-            <li>
-                <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a>
-            </li>
-        {% endfor %}
-    </Ul>
-{% endblock %}
-{#</body>#}
-{#</html>#}
+{% for post in posts %}
+    <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a><br>
+{% endfor %}
