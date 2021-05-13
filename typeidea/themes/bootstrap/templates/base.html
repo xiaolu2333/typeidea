@@ -6,7 +6,9 @@
         <title>{% block title %}Typeidea Blog{% endblock %}</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="renderer" content="webkit|ie-comp|ie-stand">
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="http://ico.z01.com/zico.min.css">
         <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
         <style>
@@ -34,12 +36,10 @@
                 <form id="searform" class="form-inline my-2 my-lg-0" method="GET">
                     <input type="search" class="form-control" placeholder="Search" name="keyword" aria-label="Search" value="{{ keyword }}">
                     <div class="btn-group">
-                        <button type="submit" id="searchall" class="btn btn-outline-success" formaction="{% url 'search' 0%}">搜索</button>
-                        <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        </button>
+                        <button type="submit" id="searchall" class="btn btn-outline-success" formaction="{% url 'search' 0 %}">搜索</button>
+                        <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                         <div class="dropdown-menu">
-                            <button type="submit" id="searchpersonal" class="btn btn-outline-success" formaction="{% url 'search' 1%}">只看个人</button>
+                            <button type="submit" id="searchpersonal" class="btn btn-outline-success" formaction="{% url 'search' 1 %}">只看个人</button>
                         </div>
                     </div>
                 </form>
@@ -58,14 +58,22 @@
                 <div class="col-3">
                     <h1 class="text-success">Hello, {{ user }}</h1>
                     {% block sidebar %}
-                        {% for sidebar in sidebars %}
-                        <div class="card sidebar">
-                            <div class="card-body">
-                                <h4 class="card-title">{{ sidebar.title }}</h4>
-                                <p>{{ sidebar.content_html }}</p>
+                        <div class="accordion" id="accordionExample">
+                            {% for sidebar in sidebars %}
+                            <div class="card">
+                                <div class="card-header " id="headingOne">
+                                    <button class="btn btn-block text-primary" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        {{ sidebar.title }}
+                                    </button>
+                                </div>
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <p class="card-title">{{ sidebar.content_html }}</p>
+                                    </div>
+                                </div>
                             </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                     {% endblock %}
                 </div>
             </div>
@@ -74,11 +82,20 @@
             {% block footer %}
                 <div class="container-fluid">
                     <hr/>
-                    <nav class="nav category">
-                        {% for cate in categories %}
-                            <a href="{% url 'category_list' cate.id %}" class="nav-link">{{ cate.name }}</a>
-                        {% endfor %}
-                    </nav>
+                    <div class="row">
+                        <div class="col-10">
+                            <nav class="nav category">
+                                {% for cate in categories %}
+                                    <a href="{% url 'category_list' cate.id %}" class="nav-link">{{ cate.name }}</a>
+                                {% endfor %}
+                            </nav>
+                        </div>
+                        <div class="col-2">
+                            <a href="{% url 'rss' %}" class=" btn bg-dark"><i class="zi zi_rsssquare text-success">RSS</i></a>
+                            <a href="{% url 'sitemap' %}" class=" btn bg-dark"><i class="zi zi_maps text-success" zico="地图">SiteMap</i></a>
+
+                        </div>
+                    </div>
                 </div>
                 <div class="container power">
                     <p class="text-center text-light">Powered By xiaolu@xiaolu.com</p>
