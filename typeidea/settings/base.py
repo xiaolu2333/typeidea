@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'blog',
     'config',
     'comment',
+    'debug_toolbar',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,8 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
