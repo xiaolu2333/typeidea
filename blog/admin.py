@@ -25,6 +25,7 @@ class CategoryAdmin(BaseOwnerAdmin):
 
     list_display = ('name', 'status', 'is_nav', 'created_time', 'owner', 'post_count')
     fields = ('name', 'status', 'is_nav')
+    search_fields = ['name', 'id']
 
     def post_count(self, obj):
         return obj.post_set.count()
@@ -34,8 +35,14 @@ class CategoryAdmin(BaseOwnerAdmin):
 
 @admin.register(Tag)
 class TagAdmin(BaseOwnerAdmin):
-    list_display = ('name', 'status', 'created_time', 'owner')
+    list_display = ('name', 'status', 'created_time', 'owner', 'post_count')
     fields = ('name', 'status')
+    search_fields = ['name', 'id']
+
+    def post_count(self, obj):
+        return obj.post_set.count()
+
+    post_count.short_description = "文章数量"
 
 
 class CategoryOwnerFilter(admin.SimpleListFilter):
@@ -72,7 +79,8 @@ class PostAdmin(BaseOwnerAdmin):
     list_display_links = []
 
     list_filter = [CategoryOwnerFilter, TagOwnerFilter]
-    search_fields = ['title', 'category__name']
+    search_fields = ['title', 'category__name', 'tag__name']
+    autocomplete_fields = ['category', 'tag']
 
     actions_on_top = True
 
