@@ -17,6 +17,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.sitemaps import views as sitemap_views
+from django.conf.urls.static import static
 
 from blog.views import IndexView, CategoryView, TagView, PostDetailView, SearchView, AuthorView, MyPostsView
 from config.views import LinkListView
@@ -32,14 +33,19 @@ urlpatterns = [
     path('category/<int:category_id>', CategoryView.as_view(), name="category_list"),
     path('tag/<int:tag_id>', TagView.as_view(), name="tag_list"),
     path('links/', LinkListView.as_view(), name="links"),
-    path('super_admin/', admin.site.urls, name="super_admin"),
-    path('admin/', custom_site.urls, name="admin"),
     path('search/<int:type_id>', SearchView.as_view(), name='search'),
     path('author/<int:author_id>', AuthorView.as_view(), name='author'),
     path('comment/', CommentView.as_view(), name='comment'),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+
     path('rss/', LatestPostFeed(), name='rss'),
     path('sitemap.xml/', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}, name='sitemap'),
+
+    path('super_admin/', admin.site.urls, name="super_admin"),
+    path('admin/', custom_site.urls, name="admin"),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar

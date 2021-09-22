@@ -19,11 +19,11 @@ class PostInline(admin.TabularInline):
     model = Post
 
 
-@admin.register(Category)
+@admin.register(Category, site=custom_site)
 class CategoryAdmin(BaseOwnerAdmin):
     inlines = [PostInline, ]
 
-    list_display = ('name', 'status', 'is_nav', 'created_time', 'owner', 'post_count')
+    list_display = ('id', 'name', 'status', 'is_nav', 'created_time', 'owner', 'post_count')
     fields = ('name', 'status', 'is_nav')
     search_fields = ['name', 'id']
 
@@ -33,9 +33,9 @@ class CategoryAdmin(BaseOwnerAdmin):
     post_count.short_description = "文章数量"
 
 
-@admin.register(Tag)
+@admin.register(Tag, site=custom_site)
 class TagAdmin(BaseOwnerAdmin):
-    list_display = ('name', 'status', 'created_time', 'owner', 'post_count')
+    list_display = ('id', 'name', 'status', 'created_time', 'owner', 'post_count')
     fields = ('name', 'status')
     search_fields = ['name', 'id']
 
@@ -94,7 +94,8 @@ class PostAdmin(BaseOwnerAdmin):
         }),
         ("内容", {
             "fields": (
-                'desc', 'content'
+                'desc',
+                'is_md', 'content_md', 'content_ck', 'content'
             )
         }),
         ("额外信息", {

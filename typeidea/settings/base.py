@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     'config',
     'comment',
     'debug_toolbar',
+    'ckeditor',
+    'ckeditor_uploader',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -125,11 +127,27 @@ QUERYCOUNT = {
     'THRESHOLDS': {
         'MEDIUM': 50,
         'HIGH': 200,
-        'MIN_TIME_TO_LOG':0,
-        'MIN_QUERY_COUNT_TO_LOG':0
+        'MIN_TIME_TO_LOG': 0,
+        'MIN_QUERY_COUNT_TO_LOG': 0
     },
     'IGNORE_REQUEST_PATTERNS': [],
     'IGNORE_SQL_PATTERNS': [],
     'DISPLAY_DUPLICATES': None,
     'RESPONSE_HEADER': 'X-DjangoQueryCount-Count'
 }
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'language': 'zh-cn',
+        'toolbar': 'full',
+        'height': 1300,
+        'width': 1000,
+        'tabSpaces': 4,
+        'extraPlugins': ','.join(['codesnippet', 'uploadimage', 'widget', 'lineutils', ]),  # 配置代码插件
+    }
+}
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CKEDITOR_UPLOAD_PATH = 'article_images'
+DEFAULT_FILE_STORAGE = 'typeidea.storage.WatermarkStorage'
