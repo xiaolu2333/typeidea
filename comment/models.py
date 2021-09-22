@@ -12,7 +12,7 @@ class Comment(models.Model):
     )
 
     target = models.CharField(max_length=100, verbose_name="评论目标")
-    content = models.CharField(max_length=2000, verbose_name="内容")
+    content = models.TextField(max_length=2000, verbose_name="内容")
     nickname = models.CharField(max_length=50, verbose_name="昵称")
     website = models.URLField(verbose_name="网站")
     email = models.EmailField(verbose_name="油箱")
@@ -21,6 +21,14 @@ class Comment(models.Model):
 
     @classmethod
     def get_by_target(cls, target):
+        target_type = target.split('/')[1]
+        if target_type == 'post':
+            target_id = target.split('/')[-1].split('.')[0]
+            target = Post.objects.get(id=target_id).title
+        elif target_type == 'links':
+            target = '友链页面'
+        else:
+            target = target
         return cls.objects.filter(target=target, status=cls.STATUS_NORMAL)
 
     class Meta:
