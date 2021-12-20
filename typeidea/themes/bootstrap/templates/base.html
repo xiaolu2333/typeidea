@@ -56,7 +56,7 @@
                     {% endblock %}
                 </div>
                 <div class="col-3">
-                    <h1 class="text-success">Hello, {{ user }}</h1>
+                    <h1 class="text-success text-nowrap">Hello, {{ user }}</h1>
                     {% block sidebar %}
                         <div class="accordion" id="accordionExample">
                             {% for sidebar in sidebars %}
@@ -66,7 +66,7 @@
                                         {{ sidebar.title }}
                                     </button>
                                 </div>
-                                <div id="collapse{{ sidebar.title }}" class="collapse show" aria-labelledby="heading{{ sidebar.title }}" data-parent="#accordionExample">
+                                <div id="collapse{{ sidebar.title }}" class="collapse" aria-labelledby="heading{{ sidebar.title }}" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <p class="card-title">{{ sidebar.content_html }}</p>
                                     </div>

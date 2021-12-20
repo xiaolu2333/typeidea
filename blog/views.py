@@ -21,7 +21,7 @@ class CommonViewMixin(object):
     def get_context_data(self, **kwargs):
         context = super(CommonViewMixin, self).get_context_data(**kwargs)
         context.update({
-            'sidebars': SideBar.get_all(),
+            'sidebars': SideBar.objects.filter(owner=self.request.user),
             'user': self.request.user
         })
         if self.request.method == 'GET':

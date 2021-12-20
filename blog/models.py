@@ -116,9 +116,12 @@ class Post(models.Model):
         return post_list, tag
 
     @staticmethod
-    def get_by_category(category_id):
+    def get_by_category(category_id, owner_id=None):
         try:
-            category = Category.objects.get(id=category_id)
+            if owner_id:
+                category = Category.objects.get(id=category_id, owner_id=owner_id, status=Post.STATUS_NORMAL).order_by("-id")
+            else:
+                category = Category.objects.get(id=category_id, status=Post.STATUS_NORMAL).order_by("-id")
         except Category.DoesNotExist:
             category = None
             post_list = []
@@ -136,8 +139,11 @@ class Post(models.Model):
         return queryset
 
     @classmethod
-    def hot_posts(cls):
-        queryset = cls.objects.filter(status=Post.STATUS_NORMAL).order_by('-pv')[:5]
+    def hot_posts(cls, owner_id=None):
+        if owner_id:
+            queryset = cls.objects.filter(status=cls.STATUS_NORMAL, owner=owner_id).order_by("-id")
+        else:
+            queryset = cls.objects.filter(status=Post.STATUS_NORMAL).order_by('-pv')[:5]
         return queryset
 
     @cached_property

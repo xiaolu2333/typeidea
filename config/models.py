@@ -3,6 +3,7 @@ from django.db import models
 
 
 # Create your models here.
+from django.http import request
 from django.template.loader import render_to_string
 
 
@@ -70,17 +71,17 @@ class SideBar(models.Model):
             result = self.content
         elif self.display_type == self.DISPLAY_LATEST:
             context = {
-                'posts': Post.latest_posts()[:5]
+                'posts': Post.latest_posts(owner_id=self.owner_id)[:5]
             }
             result = render_to_string('config/blocks/sidebar_posts.html', context)
         elif self.display_type == self.DISPLAY_HOT:
             context = {
-                'posts': Post.hot_posts()
+                'posts': Post.hot_posts(owner_id=self.owner_id)
             }
             result = render_to_string('config/blocks/sidebar_posts.html', context)
         elif self.display_type == self.DISPLAY_COMMENT:
             context = {
-                'comments': Comment.objects.filter(status=Comment.STATUS_NORMAL)[:5]
+                'comments': Comment.objects.filter(status=Comment.STATUS_NORMAL, owner_id=self.owner_id)[:5]
             }
             result = render_to_string('config/blocks/sidebar_comments.html',context)
         return result
