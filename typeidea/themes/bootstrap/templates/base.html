@@ -61,12 +61,12 @@
                         <div class="accordion" id="accordionExample">
                             {% for sidebar in sidebars %}
                             <div class="card">
-                                <div class="card-header " id="headingOne">
-                                    <button class="btn btn-block text-primary" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <div class="card-header " id="heading{{ sidebar.title }}">
+                                    <button class="btn btn-block text-primary" type="button" data-toggle="collapse" data-target="#collapse{{ sidebar.title }}" aria-expanded="true" aria-controls="collapse{{ sidebar.title }}">
                                         {{ sidebar.title }}
                                     </button>
                                 </div>
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                <div id="collapse{{ sidebar.title }}" class="collapse show" aria-labelledby="heading{{ sidebar.title }}" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <p class="card-title">{{ sidebar.content_html }}</p>
                                     </div>
@@ -92,7 +92,7 @@
                         </div>
                         <div class="col-2">
                             <a href="{% url 'rss' %}" class=" btn bg-dark"><i class="zi zi_rsssquare text-success">RSS</i></a>
-                            <a href="{% url 'sitemap' %}" class=" btn bg-dark"><i class="zi zi_maps text-success" zico="地图">SiteMap</i></a>
+                            <a href="{% url 'sitemap' %}" class=" btn bg-dark"><i class="zi zi_maps text-success">SiteMap</i></a>
 
                         </div>
                     </div>
