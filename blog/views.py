@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.contrib.auth.models import AnonymousUser
 from django.db.models import Q, F
 from django.views.generic import DetailView, ListView
 from django.shortcuts import get_object_or_404
@@ -19,10 +20,17 @@ class CommonViewMixin(object):
         self.kwargs = kwargs
 
     def get_context_data(self, **kwargs):
+        if isinstance(self.request.user, AnonymousUser):
+            sidebars = None
+            user = '游客'
+        else:
+            sidebars = SideBar.objects.filter(owner=self.request.user)
+            user = self.request.user
+
         context = super(CommonViewMixin, self).get_context_data(**kwargs)
         context.update({
-            'sidebars': SideBar.objects.filter(owner=self.request.user),
-            'user': self.request.user
+            'sidebars': sidebars,
+            'user': user
         })
         if self.request.method == 'GET':
             context.update(Category.get_navs(owner=self.request.user.id))
