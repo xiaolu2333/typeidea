@@ -25,6 +25,8 @@ from .custom_site import custom_site
 from comment.views import CommentView
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
+from blog.apis import post_list, PostList
+
 
 urlpatterns = [
     path('', IndexView.as_view(), name="index"),
@@ -43,6 +45,9 @@ urlpatterns = [
 
     path('super_admin/', admin.site.urls, name="super_admin"),
     path('admin/', custom_site.urls, name="admin"),
+
+    # path('api/post/',post_list, name='post_list'),
+    path('api/post/', PostList.as_view(), name='post_list'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
