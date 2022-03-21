@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.sitemaps import views as sitemap_views
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
 
 from blog.views import IndexView, CategoryView, TagView, PostDetailView, SearchView, AuthorView, MyPostsView
 from config.views import LinkListView
@@ -25,8 +26,10 @@ from .custom_site import custom_site
 from comment.views import CommentView
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
-from blog.apis import post_list, PostList
+from blog.apis import PostViewSet
 
+routers = DefaultRouter()
+routers.register('post', PostViewSet, basename='api-post')
 
 urlpatterns = [
     path('', IndexView.as_view(), name="index"),
@@ -46,8 +49,7 @@ urlpatterns = [
     path('super_admin/', admin.site.urls, name="super_admin"),
     path('admin/', custom_site.urls, name="admin"),
 
-    # path('api/post/',post_list, name='post_list'),
-    path('api/post/', PostList.as_view(), name='post_list'),
+    path('api/', include((routers.urls, 'blog'), namespace='api-post'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
