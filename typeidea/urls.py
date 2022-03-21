@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.contrib.sitemaps import views as sitemap_views
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
+from rest_framework.documentation import include_docs_urls
 
 from blog.views import IndexView, CategoryView, TagView, PostDetailView, SearchView, AuthorView, MyPostsView
 from config.views import LinkListView
@@ -49,7 +50,8 @@ urlpatterns = [
     path('super_admin/', admin.site.urls, name="super_admin"),
     path('admin/', custom_site.urls, name="admin"),
 
-    path('api/', include((routers.urls, 'blog'), namespace='api-post'))
+    path('api/', include((routers.urls, 'blog'), namespace='api-post')),
+    path('api/docs/', include_docs_urls(title='API document')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

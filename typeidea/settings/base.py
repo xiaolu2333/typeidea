@@ -154,3 +154,9 @@ CKEDITOR_UPLOAD_PATH = 'article_images'
 DEFAULT_FILE_STORAGE = 'typeidea.storage.WatermarkStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+
+REST_FRAMEWORK = {
+    # core api接口文档
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.AutoSchema',
+}
