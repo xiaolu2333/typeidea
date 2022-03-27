@@ -4,7 +4,28 @@ from blog.models import Post
 
 
 class PostSerializer(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='name'
+    )
+    tag = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='name'
+    )
+    owner = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='username'
+    )
+    created_time = serializers.DateTimeField(
+        format="%Y-%m-%d %H-%M-%S"
+    )
+
     class Meta:
         model = Post
-        fields = ['title', 'category', 'desc', 'content_html', 'created_time']
+        fields = ['id','title', 'category', 'tag', 'owner', 'desc', 'created_time']
 
+class PostDetailSerializer(PostSerializer):
+    class Meta:
+        model=Post
+        fields = ['id','title', 'category', 'tag', 'owner', 'desc', 'content_html','created_time']

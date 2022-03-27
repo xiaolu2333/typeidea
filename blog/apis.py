@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from blog.models import Post
-from blog.serializers import PostSerializer
+from blog.serializers import PostSerializer, PostDetailSerializer
 
 
 class PostViewSet(viewsets.ReadOnlyModelViewSet):
@@ -16,3 +16,7 @@ class PostViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Post.objects.filter(status=Post.STATUS_NORMAL)
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
+
+    def retrieve(self, request, *args, **kwargs):
+        self.serializer_class = PostDetailSerializer
+        return super().retrieve(request, *args, **kwargs)
