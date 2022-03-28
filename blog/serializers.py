@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from blog.models import Post
+from blog.models import Post, Category
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -23,9 +23,16 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id','title', 'category', 'tag', 'owner', 'desc', 'created_time']
+        fields = ['id', 'title', 'category', 'tag', 'owner', 'desc', 'created_time']
+
 
 class PostDetailSerializer(PostSerializer):
     class Meta:
-        model=Post
-        fields = ['id','title', 'category', 'tag', 'owner', 'desc', 'content_html','created_time']
+        model = Post
+        fields = ['id', 'title', 'category', 'tag', 'owner', 'desc', 'content_html', 'created_time']
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'created_time']
