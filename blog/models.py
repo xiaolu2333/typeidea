@@ -162,4 +162,5 @@ class Post(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = "文章"
-        ordering = ['-id']
+        # 配合分页，进行排序
+        ordering = ['id']
