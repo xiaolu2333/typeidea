@@ -27,11 +27,12 @@ from .custom_site import custom_site
 from comment.views import CommentView
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
-from blog.apis import PostViewSet,CategoryViewSet
+from blog.apis import PostViewSet, CategoryViewSet, TagViewSet
 
 routers = DefaultRouter()
 routers.register('post', PostViewSet, basename='api-post')
 routers.register('category', CategoryViewSet, basename='api-category')
+routers.register('tag', TagViewSet, basename='api-tag')
 
 urlpatterns = [
     path('', IndexView.as_view(), name="index"),

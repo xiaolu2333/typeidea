@@ -1,10 +1,11 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from blog.models import Post,Category
+from blog.models import Post, Category, Tag
 from blog.serializers import (
     PostSerializer, PostDetailSerializer,
-    CategorySerializer,CategoryDetailSerializer
+    CategorySerializer, CategoryDetailSerializer,
+    TagSerializer, TagDetailSerializer
 )
 
 
@@ -38,4 +39,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
     # 获取某分类下的文章类表
     def retrieve(self, request, *args, **kwargs):
         self.serializer_class = CategoryDetailSerializer
+        return super().retrieve(request, *args, **kwargs)
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    serializer_class = TagSerializer
+    queryset = Category.objects.filter(status=Category.STATUS_NORMAL)
+
+    # 获取某分类下的文章类表
+    def retrieve(self, request, *args, **kwargs):
+        self.serializer_class = TagDetailSerializer
         return super().retrieve(request, *args, **kwargs)
