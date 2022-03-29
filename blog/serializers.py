@@ -3,7 +3,7 @@ from rest_framework import serializers, pagination
 from blog.models import Post, Category, Tag
 
 
-class PostSerializer(serializers.ModelSerializer):
+class PostSerializer(serializers.HyperlinkedModelSerializer):
     category = serializers.SlugRelatedField(
         read_only=True,
         slug_field='name'
@@ -21,15 +21,20 @@ class PostSerializer(serializers.ModelSerializer):
         format="%Y-%m-%d %H-%M-%S"
     )
 
+    url = serializers.HyperlinkedIdentityField(view_name='api:api-post-detail')
+
     class Meta:
         model = Post
-        fields = ['id', 'title', 'category', 'tag', 'owner', 'desc', 'created_time']
+        fields = ['url', 'id', 'title', 'category', 'tag', 'owner', 'desc', 'created_time']
 
 
 class PostDetailSerializer(PostSerializer):
     class Meta:
         model = Post
         fields = ['id', 'title', 'category', 'tag', 'owner', 'desc', 'content_html', 'created_time']
+        # extra_kwargs = {
+        #     'url': {'view_name': "api-post-detail"}
+        # }
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -48,7 +53,7 @@ class CategoryDetailSerializer(CategorySerializer):
     # 反向获取某类下的文章类表
     def paginated_posts(self, obj):
         posts = obj.post_set.filter(status=Post.STATUS_NORMAL)  # 本质是一个反向过滤查询
-        paginator = pagination.PageNumberPagination()   # 需要手动做分页
+        paginator = pagination.PageNumberPagination()  # 需要手动做分页
         page = paginator.paginate_queryset(posts, self.context['request'])
         serializer = PostSerializer(page, many=True, context={'request': self.context['request']})
         return {
@@ -64,6 +69,7 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = ['id', 'name', 'created_time']
 
+
 class TagDetailSerializer(CategorySerializer):
     posts = serializers.SerializerMethodField('paginated_posts')  # SerializerMethodField将paginated_posts方法的结果反向关联到posts
 
@@ -74,7 +80,7 @@ class TagDetailSerializer(CategorySerializer):
     # 反向获取某类下的文章类表
     def paginated_posts(self, obj):
         posts = obj.post_set.filter(status=Post.STATUS_NORMAL)  # 本质是一个反向过滤查询
-        paginator = pagination.PageNumberPagination()   # 需要手动做分页
+        paginator = pagination.PageNumberPagination()  # 需要手动做分页
         page = paginator.paginate_queryset(posts, self.context['request'])
         serializer = PostSerializer(page, many=True, context={'request': self.context['request']})
         return {

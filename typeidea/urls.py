@@ -52,7 +52,7 @@ urlpatterns = [
     path('super_admin/', admin.site.urls, name="super_admin"),
     path('admin/', custom_site.urls, name="admin"),
 
-    path('api/', include((routers.urls, 'blog'), namespace='api-post')),
+    path('api/', include((routers.urls, 'blog'), namespace='api')),
     path('api/docs/', include_docs_urls(title='API document')),
 ]
 
