@@ -39,7 +39,7 @@ class CommonViewMixin(object):
 
 class IndexView(CommonViewMixin, ListView):
     queryset = Post.latest_posts()
-    paginate_by = 2
+    paginate_by = 4
     context_object_name = 'post_list'
     template_name = 'blog/list.html'
 
@@ -126,10 +126,10 @@ class AuthorView(IndexView):
 
 
 class MyPostsView(CommonViewMixin, ListView):
-    paginate_by = 2
+    paginate_by = 4
     context_object_name = 'post_list'
     template_name = 'blog/list.html'
 
     def get_queryset(self):
         queryset = Post.latest_posts(owner_id=self.request.user.id)
-        return queryset
+        return queryset.order_by('-created_time')

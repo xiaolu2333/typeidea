@@ -64,6 +64,9 @@ class Tag(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = "标签"
+        indexes = [
+            models.Index(fields=['id'], name='tag_id_idx'),
+        ]
 
 
 class Post(models.Model):
@@ -131,20 +134,22 @@ class Post(models.Model):
         return post_list, category
 
     @classmethod
-    def latest_posts(cls, owner_id=None):
+    def latest_posts(cls, owner_id=None, with_related=True):
+        queryset = cls.objects.filter(status=cls.STATUS_NORMAL)
         if owner_id:
-            queryset = cls.objects.filter(status=cls.STATUS_NORMAL, owner=owner_id).order_by("-id")
-        else:
-            queryset = cls.objects.filter(status=cls.STATUS_NORMAL).order_by("-id")
+            queryset = queryset.filter(owner=owner_id)
+        if with_related:
+            queryset = queryset.prefetch_related ('owner','category','tag')
         return queryset
 
     @classmethod
-    def hot_posts(cls, owner_id=None):
+    def hot_posts(cls, owner_id=None, with_related=True):
+        queryset = cls.objects.filter(status=cls.STATUS_NORMAL)
         if owner_id:
-            queryset = cls.objects.filter(status=cls.STATUS_NORMAL, owner=owner_id).order_by("-id")
-        else:
-            queryset = cls.objects.filter(status=Post.STATUS_NORMAL).order_by('-pv')[:5]
-        return queryset
+            queryset = queryset.filter(owner=owner_id)
+        if with_related:
+            queryset = queryset.prefetch_related ('owner','category','tag')
+        return queryset.order_by('-pv')
 
     @cached_property
     def tags(self):
@@ -163,4 +168,7 @@ class Post(models.Model):
     class Meta:
         verbose_name = verbose_name_plural = "文章"
         # 配合分页，进行排序
-        ordering = ['id']
+        ordering = ['-id']
+        indexes = [
+            models.Index(fields=['id'], name='post_id_idx'),
+        ]
