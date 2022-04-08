@@ -139,7 +139,8 @@ class Post(models.Model):
         if owner_id:
             queryset = queryset.filter(owner=owner_id)
         if with_related:
-            queryset = queryset.prefetch_related ('owner','category','tag')
+            defer_fields = ['content', 'content_html']
+            queryset = queryset.prefetch_related('owner', 'category', 'tag').defer(*defer_fields)
         return queryset
 
     @classmethod
@@ -148,7 +149,8 @@ class Post(models.Model):
         if owner_id:
             queryset = queryset.filter(owner=owner_id)
         if with_related:
-            queryset = queryset.prefetch_related ('owner','category','tag')
+            defer_fields = ['content','content_html']
+            queryset = queryset.prefetch_related ('owner','category','tag').defer(*defer_fields)
         return queryset.order_by('-pv')
 
     @cached_property

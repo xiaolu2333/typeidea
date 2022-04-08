@@ -38,7 +38,8 @@ class CommonViewMixin(object):
 
 
 class IndexView(CommonViewMixin, ListView):
-    queryset = Post.latest_posts()
+    defer_fields = ['content', 'content_html']
+    queryset = Post.latest_posts().prefetch_related('owner', 'category', 'tag').defer(*defer_fields)
     paginate_by = 4
     context_object_name = 'post_list'
     template_name = 'blog/list.html'
@@ -125,7 +126,7 @@ class AuthorView(IndexView):
         return queryset.filter(owner=author_id)
 
 
-class MyPostsView(CommonViewMixin, ListView):
+class MyPostsView(IndexView):
     paginate_by = 4
     context_object_name = 'post_list'
     template_name = 'blog/list.html'
